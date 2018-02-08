@@ -4,9 +4,9 @@
 namespace ArtabanRenderer { namespace Shaders {
 
 	StaticShader::StaticShader(const char* _vert, const char* _frag)
+		: ShaderProgram(_vert, _frag)
 	{
-		//ShaderProgram(_vert, _frag);
-		AssignShaderPath(_vert, _frag);
+		
 	}
 
 	StaticShader::~StaticShader()
@@ -23,13 +23,29 @@ namespace ArtabanRenderer { namespace Shaders {
 	void StaticShader::GetAllUniformLocations()
 	{
 		MatrixLocation = ShaderProgram::GetUniformLocation("TransformationMatrix");
+		ProjectionMatLocation = ShaderProgram::GetUniformLocation("ProjectionMatrix");
 	}
 
 	void StaticShader::LoadTransformMatrix(const mat4& _mat)
 	{
 		ShaderProgram::LoadMatrix(MatrixLocation, _mat);
-		mat4 matrix;
-		
+	}
 
+	void StaticShader::LoadProjectionMatrix(const mat4& _mat)
+	{
+		ShaderProgram::LoadMatrix(ProjectionMatLocation, _mat);
+	}
+
+	template<typename T>
+	void StaticShader::LoadMatrix(T &_mat, GLuint param)
+	{
+		if (param == 0)
+		{
+			ShaderProgram::LoadMatrix(ProjectionMatLocation, _mat);
+		}
+		else
+		{
+			ShaderProgram::LoadMatrix(MatrixLocation, _mat);
+		}
 	}
 }}

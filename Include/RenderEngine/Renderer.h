@@ -6,6 +6,7 @@
 #include "Entities/Entity.h"
 #include "Utils/MathUtils.h"
 #include "Shaders/StaticShader.h"
+#include "Camera.h"
 
 namespace ArtabanRenderer { namespace RenderEngine {
 	using glm::mat4;
@@ -15,18 +16,28 @@ namespace ArtabanRenderer { namespace RenderEngine {
 
 	class Renderer {
 	public:
-		Renderer();
+		Renderer(StaticShader* shader);
 
-		void Prepare(Entity* _entity, StaticShader* _shader);
+		void Prepare();
 
-		void Render();
+		void Render(Entity* _entity, StaticShader* _shader);
 
 		void Cleanup();
 
 	private:
-		Entity* CurrentModel;
-		StaticShader* ShaderHandle;
 		
+		StaticShader* ShaderHandle;
+
+		mat4 ProjectionMatrix;
+		mat4 ViewMatrix;
+
+		const float FOV = 70.f;
+		const float NEAR = 0.1f;
+		const float FAR = 1000.f;
+		const float ASPECT = 16.f / 9.f;
+
+		void createProjectionMatrix();
+		void createViewMatrix(Camera& cam);
 	};
 
 }}

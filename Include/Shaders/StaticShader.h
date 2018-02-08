@@ -13,6 +13,10 @@ namespace ArtabanRenderer { namespace Shaders {
 		~StaticShader();
 
 		void LoadTransformMatrix(const mat4& _mat);
+		void LoadProjectionMatrix(const mat4& _mat);
+
+		template<typename T>
+		void LoadMatrix(T &_mat, GLuint param);
 
 	protected:
 		void BindAttributes() override;
@@ -20,6 +24,7 @@ namespace ArtabanRenderer { namespace Shaders {
 
 	private:
 		GLuint MatrixLocation;
+		GLuint ProjectionMatLocation;
 	};
 
 

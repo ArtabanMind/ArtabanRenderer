@@ -13,17 +13,27 @@ namespace ArtabanRenderer { namespace Entities {
 
 	class Entity {
 	private:
+		// Cache Variable
+		GLuint modelVaoId;
+		GLuint modelTextureId;
+		unsigned int modelVertexNum;
+
 		TexturedModel* model;
 		vec3 position;
 		vec3 rotation;
 		vec3 scale;
 		mat4 transformation;
+
+		const vec3 upVec = vec3(0.f, 1.f, 0.f);
+		const vec3 rightVec = vec3(1.f, 0.f, 0.f);
+		const vec3 forwardVec = vec3(0.f, 0.f, 1.f);
+
 	public:
 		Entity();
 		Entity(TexturedModel* _model, vec3& position, vec3& rotation, vec3& scale);
 
 		void IncreasePosition(const vec3& delta);
-		void IncreaseRotation(const vec3& delta);
+		void IncreaseRotation(float dx, float dy, float dz);
 		TexturedModel* GetModel();
 		// Getter, Setter for position, rotation, scale
 
@@ -37,6 +47,11 @@ namespace ArtabanRenderer { namespace Entities {
 		void SetScale(const vec3& _scale);
 
 		mat4 GetTransformation();
+
+		unsigned int GetModelVertexCount();
+		GLuint GetModelTextureID();
+		GLuint GetModelVAOID();
+
 	};
 
 }}

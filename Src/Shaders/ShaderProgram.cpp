@@ -108,11 +108,6 @@ namespace ArtabanRenderer { namespace Shaders {
 		return true;
 	}
 
-	void ShaderProgram::AssignShaderPath(const char* _vPath, const char* _fPath)
-	{
-		VertPath = _vPath;
-		FragPath = _fPath;
-	}
 
 	/*void ShaderProgram::BindAttributes()
 	{

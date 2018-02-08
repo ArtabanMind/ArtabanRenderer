@@ -23,7 +23,7 @@ namespace ArtabanRenderer { namespace Shaders {
 		virtual void BindAttributes() = 0;
 		virtual void GetAllUniformLocations() = 0;
 
-		void AssignShaderPath(const char* _vPath, const char* _fPath);
+		
 		void BindAttributes(GLuint _idx, GLchar* _name);
 
 		void LoadFloat(int location, float value);

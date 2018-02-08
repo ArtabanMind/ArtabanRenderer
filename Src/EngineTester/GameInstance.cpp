@@ -42,10 +42,12 @@ main(void)
 	unsigned int texCoordLength = 8;
 
 	Loader loader;
-	Renderer renderer;
+	
 	const char* vPath = "Assets/vertexShader.txt";
 	const char* fPath = "Assets/fragmentShader.txt";
 	StaticShader shader(vPath, fPath);
+	
+
 	// TODO : resource release 
 	GLuint vaoID = loader.LoadVAO(data, length, indies, indexLength,
 		texCoord, texCoordLength);
@@ -53,20 +55,24 @@ main(void)
 	
 	RawModel rawModel(vaoID, indexLength);
 	TexturedModel textureModel(&rawModel, textureID);
-	Entity entity(&textureModel, vec3(-1.0f, 0.0f, 0.f), vec3(0.f), vec3(1.0f));
+	Entity entity(&textureModel, vec3(0.0f, 0.0f, 1.f), vec3(0.f), vec3(1.f));
 
 	if(!shader.Init())
 		return -1;
+	Renderer renderer(&shader);
+
 	shader.Start();
 
-	renderer.Prepare(&entity, &shader);
+	//renderer.Prepare(&entity, &shader);
+	
 
 	while (!display.DisplayClosed())
 	{
-		
-		//entity.IncreasePosition(vec3(0.02f, 0.f, 0.f));
-		entity.IncreaseRotation(vec3(0.0f, 0.0f, 0.01f));
-		renderer.Render();
+		renderer.Prepare();
+		entity.IncreasePosition(vec3(0.0f, 0.f, -0.02f));
+		entity.IncreaseRotation(0.00f, 0.0f, 0.02f);
+		//renderer.Render();
+		renderer.Render(&entity, &shader);
 
 		display.UpdateDisplay();
 	}

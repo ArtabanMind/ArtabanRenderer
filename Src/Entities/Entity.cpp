@@ -4,14 +4,22 @@ namespace ArtabanRenderer { namespace Entities {
 
 	Entity::Entity()
 		: model(nullptr), position(vec3(1.0f)), rotation(vec3(1.0f)), scale(vec3(1.0f))
+		//, transformation(Math::CreateTransformMatrix(rotation, position, scale))
 	{
-		transformation = Math::CreateTransformMatrix(rotation, position, scale);
+		transformation = Math::CreateTransformMatrix(position, rotation, scale);
+		modelTextureId = model->GetTextureID();
+		modelVaoId = model->GetRawModel()->GetVAOID();
+		modelVertexNum = model->GetRawModel()->GetVertexCount();
 	}
 
 	Entity::Entity(TexturedModel* _model, vec3& _position, vec3& _rotation, vec3& _scale)
 		: model(_model), position(_position), rotation(_rotation), scale(_scale)
+		//,transformation(Math::CreateTransformMatrix(rotation, position, scale))
 	{
-		transformation = Math::CreateTransformMatrix(rotation, position, scale);
+		transformation = Math::CreateTransformMatrix(position, rotation, scale);
+		modelTextureId = model->GetTextureID();
+		modelVaoId = model->GetRawModel()->GetVAOID();
+		modelVertexNum = model->GetRawModel()->GetVertexCount();
 	}
 
 	void Entity::IncreasePosition(const vec3& delta)
@@ -20,12 +28,24 @@ namespace ArtabanRenderer { namespace Entities {
 		transformation = glm::translate(transformation, delta);
 	}
 
-	void Entity::IncreaseRotation(const vec3& delta)
+	void Entity::IncreaseRotation(float dx, float dy, float dz)
 	{
-		rotation += delta;
-		transformation = glm::rotate(transformation, delta.x, vec3(1.f, 0.f, 0.f));
-		transformation = glm::rotate(transformation, delta.y, vec3(0.f, 1.f, 0.f));
-		transformation = glm::rotate(transformation, delta.z, vec3(0.f, 0.f, 1.f));
+		
+		if (dx != 0.f)
+		{
+			rotation.x += dx;
+			transformation = glm::rotate(transformation, dx, rightVec);
+		}
+		if (dy != 0.f)
+		{
+			rotation.y += dy;
+			transformation = glm::rotate(transformation, dy, upVec);
+		}
+		if (dz != 0.f)
+		{
+			rotation.z += dz;
+			transformation = glm::rotate(transformation, dz, forwardVec);
+		}
 	}
 
 	TexturedModel* Entity::GetModel()
@@ -66,5 +86,20 @@ namespace ArtabanRenderer { namespace Entities {
 	mat4 Entity::GetTransformation()
 	{
 		return transformation;
+	}
+
+	GLuint Entity::GetModelTextureID()
+	{
+		return modelTextureId;
+	}
+
+	GLuint Entity::GetModelVAOID()
+	{
+		return modelVaoId;
+	}
+
+	unsigned int Entity::GetModelVertexCount()
+	{
+		return modelVertexNum;
 	}
 }}

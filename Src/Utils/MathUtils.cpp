@@ -12,9 +12,10 @@ namespace ArtabanRenderer { namespace MathUtils {
 		retMatrix = glm::rotate(retMatrix, rotation.x, vec3(1.f, 0.f, 0.f));
 		retMatrix = glm::rotate(retMatrix, rotation.y, vec3(0.f, 1.f, 0.f));
 		retMatrix = glm::rotate(retMatrix, rotation.z, vec3(0.f, 0.f, 1.f));
-		retMatrix = glm::scale(retMatrix, scale);
-
-		return retMatrix;
+		glm::mat4 scaleMat4 = glm::scale(mat4(1.0f), scale);
+		//retMatrix = glm::scale(retMatrix, scale);
+		return retMatrix * scaleMat4;
+		//return retMatrix;
 	}
 
 }}
