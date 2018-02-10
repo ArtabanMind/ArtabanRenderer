@@ -1,8 +1,10 @@
 
 #include "Shaders/ShaderProgram.h"
 #include "Utils/FileUtils.h"
+
 #include <iostream>
 #include <vector>
+
 
 
 namespace ArtabanRenderer { namespace Shaders {
@@ -142,15 +144,28 @@ namespace ArtabanRenderer { namespace Shaders {
 
 	void ShaderProgram::LoadMatrix(int location, const mat4& matrix)
 	{
-		ShaderMatrix = matrix;
-		
 		glUniformMatrix4fv(location, 1, false, &matrix[0][0]);
-		
 	}
 
 	GLuint ShaderProgram::GetUniformLocation(GLchar* _uniformName)
 	{
 		return glGetUniformLocation(ShaderProg, _uniformName);
 	}
+	
+	glm::mat4 ShaderProgram::CreateProjectionMatrix()
+	{
+		return glm::perspective<float>(FOV, ASPECT, NEAR, FAR);
+	}
 
+	glm::mat4 ShaderProgram::CreateViewMatrix(GameCamera *cam)
+	{
+		glm::mat4 view(1.0f);
+		view = glm::rotate(view, cam->GetPitch(), vec3(1.f, 0.f, 0.f));
+		view = glm::rotate(view, cam->GetYaw(), vec3(0.f, 1.f, 0.f));
+		vec3 pos = cam->GetCamPosition();
+		pos *= -1.f;
+		view = glm::translate(view, pos);
+
+		return view;
+	}
 }}

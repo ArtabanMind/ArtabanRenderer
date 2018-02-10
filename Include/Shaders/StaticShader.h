@@ -1,8 +1,8 @@
 #pragma once
 
-#include <gl/glew.h>
-#include <GLFW/glfw3.h>
+#include "Default.h"
 #include "ShaderProgram.h"
+#include "RenderEngine/Camera.h"
 
 namespace ArtabanRenderer { namespace Shaders {
 
@@ -13,10 +13,25 @@ namespace ArtabanRenderer { namespace Shaders {
 		~StaticShader();
 
 		void LoadTransformMatrix(const mat4& _mat);
-		void LoadProjectionMatrix(const mat4& _mat);
+		void LoadProjectionMatrix();
+		void LoadViewMatrix(GameCamera* _cam);
 
 		template<typename T>
-		void LoadMatrix(T &_mat, GLuint param);
+		void GeneralLoadMatrix(T &_mat, GLuint param)
+		{
+			if (param == 0)
+			{
+				this->LoadMatrix(ProjectionMatLocation, _mat);
+			}
+			else if (param == 1)
+			{
+				this->LoadMatrix(ViewMatLocation, _mat);
+			}
+			else
+			{
+				this->LoadMatrix(MatrixLocation, _mat);
+			}
+		}
 
 	protected:
 		void BindAttributes() override;
@@ -25,6 +40,7 @@ namespace ArtabanRenderer { namespace Shaders {
 	private:
 		GLuint MatrixLocation;
 		GLuint ProjectionMatLocation;
+		GLuint ViewMatLocation;
 	};
 
 

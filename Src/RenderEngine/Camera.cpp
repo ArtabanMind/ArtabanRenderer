@@ -3,27 +3,34 @@
 
 namespace ArtabanRenderer { namespace RenderEngine {
 	
-	void Camera::Move()
+	GameCamera::GameCamera()
+		: pitch(0.f), roll(0.f), yaw(0.f), CamPosition(vec3(0.f))
 	{
 
 	}
 
-	const vec3 Camera::GetCamPosition()
+	void GameCamera::Move(float right, float forward)
+	{
+		CamPosition.x += right;
+		CamPosition.z += forward;
+	}
+
+	const vec3 GameCamera::GetCamPosition()
 	{
 		return CamPosition;
 	}
 
-	const float Camera::GetPitch()
+	const float GameCamera::GetPitch()
 	{
 		return pitch;
 	}
 
-	const float Camera::GetRoll()
+	const float GameCamera::GetRoll()
 	{
 		return roll;
 	}
 
-	const float Camera::GetYaw()
+	const float GameCamera::GetYaw()
 	{
 		return yaw;
 	}

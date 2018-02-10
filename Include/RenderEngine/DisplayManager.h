@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "Camera.h"
 
 namespace ArtabanRenderer { namespace RenderEngine {
 
@@ -22,10 +23,15 @@ namespace ArtabanRenderer { namespace RenderEngine {
 
 		bool DisplayClosed();
 
+		void AssignCam(GameCamera* _cam);
+
+		static GameCamera* DisplayCam;
 	private:
 		int Width;
 		int Height;
 		const char* Title;
+
+		
 
 		GLenum error;
 		GLFWwindow* Window;

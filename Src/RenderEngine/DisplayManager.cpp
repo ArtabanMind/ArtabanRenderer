@@ -4,6 +4,8 @@
 
 namespace ArtabanRenderer { namespace RenderEngine {
 
+	GameCamera* DisplayManager::DisplayCam = nullptr;
+
 	DisplayManager::DisplayManager()
 	{
 
@@ -82,9 +84,35 @@ namespace ArtabanRenderer { namespace RenderEngine {
 		return glfwWindowShouldClose(Window) == 1;
 	}
 
+	void DisplayManager::AssignCam(GameCamera* _cam)
+	{
+		DisplayCam = _cam;
+	}
+
 	void DisplayManager::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		// TODO
+		if (DisplayCam != nullptr)
+		{
+			float delta = 0.02f;
+			switch (key)
+			{
+			case GLFW_KEY_W:
+				DisplayCam->Move(0.f, -delta);
+				break;
+			case GLFW_KEY_S:
+				DisplayCam->Move(0.f, delta);
+				break;
+			case GLFW_KEY_A:
+				DisplayCam->Move(-delta, 0.f);
+				break;
+			case GLFW_KEY_D:
+				DisplayCam->Move(delta, 0.f);
+				break;
+			}
+
+		}
+
 	}
 
 	void DisplayManager::MouseButtonCallback(GLFWwindow* window, int key, int action, int mods)

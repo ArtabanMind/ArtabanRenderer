@@ -24,6 +24,7 @@ namespace ArtabanRenderer { namespace Shaders {
 	{
 		MatrixLocation = ShaderProgram::GetUniformLocation("TransformationMatrix");
 		ProjectionMatLocation = ShaderProgram::GetUniformLocation("ProjectionMatrix");
+		ViewMatLocation = ShaderProgram::GetUniformLocation("ViewMatrix");
 	}
 
 	void StaticShader::LoadTransformMatrix(const mat4& _mat)
@@ -31,21 +32,16 @@ namespace ArtabanRenderer { namespace Shaders {
 		ShaderProgram::LoadMatrix(MatrixLocation, _mat);
 	}
 
-	void StaticShader::LoadProjectionMatrix(const mat4& _mat)
+	void StaticShader::LoadProjectionMatrix()
 	{
+		mat4 _mat = ShaderProgram::CreateProjectionMatrix();
 		ShaderProgram::LoadMatrix(ProjectionMatLocation, _mat);
 	}
 
-	template<typename T>
-	void StaticShader::LoadMatrix(T &_mat, GLuint param)
+	void StaticShader::LoadViewMatrix(GameCamera* _cam)
 	{
-		if (param == 0)
-		{
-			ShaderProgram::LoadMatrix(ProjectionMatLocation, _mat);
-		}
-		else
-		{
-			ShaderProgram::LoadMatrix(MatrixLocation, _mat);
-		}
+		mat4 _mat = ShaderProgram::CreateViewMatrix(_cam);
+		ShaderProgram::LoadMatrix(ViewMatLocation, _mat);
 	}
+
 }}

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <gl/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
+#include "Default.h"
+#include "RenderEngine/Camera.h"
 
 namespace ArtabanRenderer { namespace Shaders {
 	using glm::vec3;
 	using glm::mat4;
+	using namespace RenderEngine;
 
 	class ShaderProgram {
 
@@ -36,6 +36,10 @@ namespace ArtabanRenderer { namespace Shaders {
 
 		GLuint GetUniformLocation(GLchar* _uniformName);
 	
+		glm::mat4 CreateProjectionMatrix();
+
+		glm::mat4 CreateViewMatrix(GameCamera* cam);
+
 	private:
 		const char* VertPath;
 		const char* FragPath;
@@ -44,7 +48,11 @@ namespace ArtabanRenderer { namespace Shaders {
 		GLuint VertexHandle;
 		GLuint FragmentHandle;
 
-		mat4 ShaderMatrix;
+		const float FOV = 70.f;
+		const float NEAR = 0.1f;
+		const float FAR = 1000.f;
+		const float ASPECT = 16.f / 9.f;
+		
 
 		bool LoadShader(const char* _path, int _type, GLuint& handle);
 	};

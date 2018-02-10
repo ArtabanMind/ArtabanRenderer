@@ -7,23 +7,26 @@ namespace ArtabanRenderer { namespace RenderEngine {
 	
 
 
-	Renderer::Renderer(StaticShader* shader, Camera& cam)
+	Renderer::Renderer(StaticShader* shader, GameCamera* cam, Entity* _entity)
 	{
-		createProjectionMatrix();
-		createViewMatrix(cam);
+
 		shader->Start();
-		shader->LoadProjectionMatrix(ProjectionMatrix);
+		shader->LoadProjectionMatrix();
+		shader->LoadViewMatrix(cam);
+		shader->LoadTransformMatrix(_entity->GetTransformation());
 		shader->Stop();
 	}
 
 	void Renderer::Prepare()
 	{
+		glEnable(GL_DEPTH_TEST);
 		glClearColor(0.f, 0.f, 0.f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	}
 
-	void Renderer::Render(Entity* _entity, StaticShader* shader)
+	void Renderer::Render(Entity* _entity, StaticShader* shader, 
+		GameCamera* _cam)
 	{
 
 		// Command Parameter Setup for Draw call ++++
@@ -35,8 +38,11 @@ namespace ArtabanRenderer { namespace RenderEngine {
 		glBindTexture(GL_TEXTURE_2D, _entity->GetModelTextureID());
 
 		shader->LoadTransformMatrix(_entity->GetTransformation());
-		//shader->LoadMatrix<mat4>(_entity->GetTransformation(), 1);
+		shader->LoadViewMatrix(_cam);
+		shader->LoadProjectionMatrix();
+		//shader->GeneralLoadMatrix<mat4>(_entity->GetTransformation(), 1);
 		// Finish Setup Parameters
+
 		glDrawElements(GL_TRIANGLES, 
 			_entity->GetModelVertexCount(), 
 			GL_UNSIGNED_INT, 
@@ -52,21 +58,6 @@ namespace ArtabanRenderer { namespace RenderEngine {
 		glBindVertexArray(0);
 	}
 
-	void Renderer::createProjectionMatrix()
-	{
-		ProjectionMatrix = glm::perspective<float>(FOV, ASPECT, NEAR, FAR);
-	}
-
-	void Renderer::createViewMatrix(Camera &cam)
-	{
-		glm::mat4 view(1.0f);
-		view = glm::rotate(view, cam.GetPitch(), vec3(1.f, 0.f, 0.f));
-		view = glm::rotate(view, cam.GetYaw(), vec3(0.f, 1.f, 0.f));
-		vec3 pos = cam.GetCamPosition();
-		pos *= -1.f;
-		view = glm::translate(view, pos);
-
-		return view;
-	}
+	
 
 }}
